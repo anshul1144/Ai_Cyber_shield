@@ -131,6 +131,22 @@ class LogMonitor:
                 with open(self.watch_file, 'a') as f:
                     f.write(f"[{now_str}] nginx: 198.51.100.12 - - \"GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1\" 401\n")
                 continue
+            elif att_type == "DDoS":
+                # DDoS connection flood warnings
+                with open(self.watch_file, 'a') as f:
+                    for _ in range(3):
+                        f.write(f"[{now_str}] nginx: warning: rate limit exceeded for client 192.168.1.105 on raw HTTP request flood\n")
+                continue
+            elif att_type == "Ransomware":
+                # Ransomware warning logs
+                with open(self.watch_file, 'a') as f:
+                    f.write(f"[{now_str}] kernel: warning: suspicious process crypt_locker.exe (PID 9999) performing rapid file updates in monitored folder\n")
+                continue
+            elif att_type == "Zero-day Exploit":
+                # Exploit pattern warnings
+                with open(self.watch_file, 'a') as f:
+                    f.write(f"[{now_str}] kernel: warning: memory buffer overflow attempt intercepted from exploit_payload.exe (PID 8888)\n")
+                continue
             
             # Normal random log
             import random

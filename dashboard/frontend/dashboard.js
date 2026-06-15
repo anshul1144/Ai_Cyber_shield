@@ -102,6 +102,18 @@ function connectWebSocket() {
 
 // Handle incoming telemetry stream
 function handleTelemetry(data) {
+    // 0. Update header status badge dynamically based on threat protection
+    const systemStatusBadge = document.getElementById("system-status");
+    if (data.protection && data.protection.is_mitigating) {
+        systemStatusBadge.innerHTML = '<div class="status-dot" style="background-color: var(--success); box-shadow: 0 0 10px var(--success);"></div> ACTIVE PROTECTION: SAFEGUARDED';
+        systemStatusBadge.style.color = "var(--success)";
+        systemStatusBadge.style.borderColor = "rgba(16, 185, 129, 0.5)";
+    } else {
+        systemStatusBadge.innerHTML = '<div class="status-dot"></div> MONITORING ACTIVATED';
+        systemStatusBadge.style.color = "var(--success)";
+        systemStatusBadge.style.borderColor = "rgba(16, 185, 129, 0.3)";
+    }
+
     // 1. Update Core Metric Widgets
     document.getElementById("val-connections").innerText = data.network.connection_count;
     
@@ -143,6 +155,16 @@ function handleTelemetry(data) {
     if (data.threat.is_threat) {
         document.getElementById("alert-type").innerText = `CRITICAL THREAT DETECTED: ${data.threat.attack_type}`;
         document.getElementById("alert-details").innerText = `Machine Learning Model matched threat type. Confidence: ${(data.threat.confidence * 100).toFixed(0)}%. Severity: ${data.threat.severity_score}/100.`;
+        
+        // Show active protection mitigation action
+        const mitigationText = document.getElementById("alert-mitigation-text");
+        const mitigationContainer = document.getElementById("alert-mitigation-container");
+        if (data.protection && data.protection.is_mitigating) {
+            mitigationText.innerText = `SHIELD ACTIVE: ${data.protection.action_taken}`;
+            mitigationContainer.style.display = "flex";
+        } else {
+            mitigationContainer.style.display = "none";
+        }
         alertBanner.style.display = "flex";
     } else {
         // Only hide if not simulated sticky alert
@@ -188,6 +210,15 @@ function handleTelemetry(data) {
         });
     }
     
+    // Add shield mitigation notifications
+    if (data.protection && data.protection.is_mitigating) {
+        mergedAuditLogs.push({
+            type: "mitigation",
+            timestamp: new Date().toLocaleTimeString(),
+            message: `[Active Defense Mitigation] ${data.protection.action_taken}`
+        });
+    }
+    
     // Add file monitor notifications
     data.file.event_history.slice(0, 8).forEach(evt => {
         mergedAuditLogs.push({
@@ -209,7 +240,13 @@ function handleTelemetry(data) {
     // Sort combined events
     mergedAuditLogs.forEach(log => {
         const div = document.createElement("div");
-        div.className = `log-item ${log.type === 'threat' ? 'threat' : ''}`;
+        let itemClass = "log-item";
+        if (log.type === "threat") {
+            itemClass += " threat";
+        } else if (log.type === "mitigation") {
+            itemClass += " mitigation";
+        }
+        div.className = itemClass;
         div.innerHTML = `
             <span class="log-timestamp">${log.timestamp}</span>
             <span class="log-msg">${log.message}</span>

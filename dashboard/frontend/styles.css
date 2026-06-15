@@ -315,6 +315,38 @@ header {
     margin-top: 0.15rem;
 }
 
+.alert-mitigation-box {
+    margin-top: 0.65rem;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    padding: 0.5rem 0.85rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #a7f3d0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
+}
+
+.shield-defense-icon {
+    width: 16px;
+    height: 16px;
+    fill: var(--success);
+    filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.5));
+}
+
+.log-item.mitigation {
+    background: rgba(16, 185, 129, 0.06);
+    border-left: 3px solid var(--success);
+}
+
+.log-item.mitigation .log-msg {
+    color: #86efac;
+    font-weight: bold;
+}
+
 @keyframes pulse {
     0% { transform: scale(0.95); opacity: 0.5; }
     50% { transform: scale(1.15); opacity: 1; }

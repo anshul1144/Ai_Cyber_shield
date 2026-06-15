@@ -94,3 +94,68 @@
 [2026-06-15 17:46:54] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
 [2026-06-15 17:47:02] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
 [2026-06-15 17:47:10] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
+[2026-06-15 19:17:27] auth: Failed login attempt for user 'root' from 192.168.1.10
+[2026-06-15 19:17:35] auth: Failed login attempt for user 'root' from 185.220.101.4
+[2026-06-15 19:17:43] auth: Failed login attempt for user 'db_user' from 198.51.100.12
+[2026-06-15 19:20:24] systemd: Periodic cleanup task executed successfully.
+[2026-06-15 19:20:32] systemd: Periodic cleanup task executed successfully.
+[2026-06-15 19:20:40] auth: Connection accepted for user 'root' from 185.220.101.4
+[2026-06-15 19:20:48] auth: Connection accepted for user 'developer' from 185.220.101.4
+[2026-06-15 19:20:56] auth: Failed login attempt for user 'developer' from 10.0.0.12
+[2026-06-15 19:21:04] auth: Connection accepted for user 'guest' from 198.51.100.12
+[2026-06-15 19:21:13] auth: Connection accepted for user 'root' from 10.0.0.12
+[2026-06-15 19:21:21] auth: Connection accepted for user 'admin' from 192.168.1.10
+[2026-06-15 19:21:29] systemd: Periodic cleanup task executed successfully.
+[2026-06-15 19:21:37] systemd: Periodic cleanup task executed successfully.
+[2026-06-15 19:21:45] auth: Failed login attempt for user 'developer' from 192.168.1.15
+[2026-06-15 19:21:53] auth: Failed login attempt for user 'db_user' from 198.51.100.12
+[2026-06-15 19:22:01] auth: Failed login attempt for user 'db_user' from 192.168.1.10
+[2026-06-15 19:22:09] auth: Connection accepted for user 'guest' from 10.0.0.12
+[2026-06-15 19:22:17] systemd: Periodic cleanup task executed successfully.
+[2026-06-15 19:22:25] systemd: Periodic cleanup task executed successfully.
+[2026-06-15 19:22:33] systemd: Periodic cleanup task executed successfully.
+[2026-06-15 19:22:41] auth: Failed login attempt for user 'developer' from 185.220.101.4
+[2026-06-15 19:22:49] systemd: Periodic cleanup task executed successfully.
+[2026-06-15 19:22:57] systemd: Periodic cleanup task executed successfully.
+[2026-06-15 19:23:05] systemd: Periodic cleanup task executed successfully.
+[2026-06-15 19:23:13] systemd: Periodic cleanup task executed successfully.
+[2026-06-15 19:23:21] auth: Failed login attempt for user 'admin' from 10.0.0.12
+[2026-06-15 19:23:29] auth: Connection accepted for user 'developer' from 185.220.101.4
+[2026-06-15 19:23:37] auth: Connection accepted for user 'db_user' from 198.51.100.12
+[2026-06-15 19:23:45] auth: Failed login attempt for user 'admin' from 198.51.100.12
+[2026-06-15 19:23:53] auth: Failed login attempt for user 'admin' from 185.220.101.4
+[2026-06-15 19:24:01] auth: Connection accepted for user 'root' from 198.51.100.12
+[2026-06-15 19:24:09] auth: Failed login attempt for user 'root' from 10.0.0.12
+[2026-06-15 19:24:17] auth: Connection accepted for user 'root' from 192.168.1.15
+[2026-06-15 19:24:25] auth: Failed login attempt for user 'root' from 192.168.1.15
+[2026-06-15 19:24:33] systemd: Periodic cleanup task executed successfully.
+[2026-06-15 19:24:41] auth: Connection accepted for user 'db_user' from 192.168.1.15
+[2026-06-15 19:24:49] auth: Failed login attempt for user 'guest' from 192.168.1.10
+[2026-06-15 19:24:57] systemd: Periodic cleanup task executed successfully.
+[2026-06-15 19:25:05] auth: Failed login attempt for user 'guest' from 192.168.1.10
+[2026-06-15 19:25:13] auth: Connection accepted for user 'guest' from 198.51.100.12
+[2026-06-15 19:25:21] auth: Connection accepted for user 'admin' from 198.51.100.12
+[2026-06-15 19:25:29] auth: Failed login attempt for user 'root' from 198.51.100.12
+[2026-06-15 19:25:37] systemd: Periodic cleanup task executed successfully.
+[2026-06-15 19:25:45] auth: Failed login attempt for user 'root' from 192.168.1.10
+[2026-06-15 19:25:53] auth: Failed login attempt for user 'root' from 10.0.0.12
+[2026-06-15 19:25:55] auth: Failed login attempt for user 'db_user' from 192.168.1.15
+[2026-06-15 19:26:02] auth: Failed login attempt for user 'db_user' from 185.220.101.4
+[2026-06-15 19:26:10] auth: Connection accepted for user 'root' from 192.168.1.10
+[2026-06-15 19:26:18] auth: Failed login attempt for user 'admin' from 185.220.101.4
+[2026-06-15 19:26:26] systemd: Periodic cleanup task executed successfully.
+[2026-06-15 19:26:34] auth: Connection accepted for user 'guest' from 198.51.100.12
+[2026-06-15 19:26:42] auth: Failed login attempt for user 'db_user' from 192.168.1.10
+[2026-06-15 19:26:50] auth: Connection accepted for user 'admin' from 198.51.100.12
+[2026-06-15 19:26:58] auth: Connection accepted for user 'root' from 192.168.1.10
+[2026-06-15 19:27:06] auth: Connection accepted for user 'db_user' from 10.0.0.12
+[2026-06-15 19:27:27] systemd: Periodic cleanup task executed successfully.
+[2026-06-15 19:27:35] nginx: warning: rate limit exceeded for client 192.168.1.105 on raw HTTP request flood
+[2026-06-15 19:27:35] nginx: warning: rate limit exceeded for client 192.168.1.105 on raw HTTP request flood
+[2026-06-15 19:27:35] nginx: warning: rate limit exceeded for client 192.168.1.105 on raw HTTP request flood
+[2026-06-15 19:27:43] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
+[2026-06-15 19:27:51] kernel: warning: suspicious process crypt_locker.exe (PID 9999) performing rapid file updates in monitored folder
+[2026-06-15 19:27:59] kernel: warning: memory buffer overflow attempt intercepted from exploit_payload.exe (PID 8888)
+[2026-06-15 19:28:07] kernel: warning: memory buffer overflow attempt intercepted from exploit_payload.exe (PID 8888)
+[2026-06-15 19:28:15] kernel: warning: memory buffer overflow attempt intercepted from exploit_payload.exe (PID 8888)
+[2026-06-15 19:28:23] auth: Connection accepted for user 'root' from 192.168.1.15

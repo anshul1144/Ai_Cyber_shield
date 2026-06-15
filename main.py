@@ -126,6 +126,44 @@ class CentralOrchestrator:
                     "anomaly_score": 92.5,
                     "decision_score": -0.25
                 }
+            elif self.current_simulation == "DDoS":
+                anomaly_pred = {
+                    "is_anomaly": True,
+                    "anomaly_score": 88.0,
+                    "decision_score": -0.18
+                }
+            elif self.current_simulation == "SQL Injection":
+                anomaly_pred = {
+                    "is_anomaly": True,
+                    "anomaly_score": 54.2,
+                    "decision_score": -0.05
+                }
+        
+        # Determine mitigation action taken by the shield
+        protection_status = {
+            "status": "Safe baseline",
+            "action_taken": "continuous passive threat monitoring active.",
+            "is_mitigating": False
+        }
+        
+        if threat_pred.get("is_threat"):
+            attack = threat_pred.get("attack_type")
+            protection_status["is_mitigating"] = True
+            protection_status["status"] = "ACTIVE MITIGATION IN PROGRESS"
+            if attack == "DDoS" or attack == "DDoS Attack":
+                protection_status["action_taken"] = "Rate-limiting activated. Blocked 350 spam IP addresses. Traffic dropped to safe threshold. Core network safeguarded."
+            elif attack == "SQL Injection":
+                protection_status["action_taken"] = "WAF rule triggered: Blocked request payload. Sanitized database inputs. Threat IP quarantined: 198.51.100.12."
+            elif attack == "Brute Force":
+                protection_status["action_taken"] = "Account Lockout Policy triggered. Suspicious IP 185.220.101.4 blacklisted. Authentication rate-limit applied."
+            elif attack == "Ransomware":
+                protection_status["action_taken"] = "Isolated crypt_locker.exe (PID 9999) from filesystem access. Restored files from secure shadow-copies."
+            elif attack == "Zero-day Exploit":
+                protection_status["action_taken"] = "Sandboxed process execution container. Blocked command-and-control server requests. Kernel patching simulation applied."
+        elif anomaly_pred.get("is_anomaly"):
+            protection_status["is_mitigating"] = True
+            protection_status["status"] = "ANOMALY LOAD BALANCING ACTIVE"
+            protection_status["action_taken"] = "High system load mitigation active. Automatic process isolation initialized."
         
         return {
             "network": self.network_monitor.get_status(),
@@ -133,7 +171,8 @@ class CentralOrchestrator:
             "file": self.file_monitor.get_status(),
             "log": self.log_monitor.get_status(),
             "threat": threat_pred,
-            "anomaly": anomaly_pred
+            "anomaly": anomaly_pred,
+            "protection": protection_status
         }
 
     def _telemetry_broadcast_loop(self):
