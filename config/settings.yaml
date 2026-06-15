@@ -1,0 +1,23 @@
+# AI Cyber Shield - Settings Configuration
+
+monitors:
+  network:
+    interval: 1.0
+    sniff_packets: false
+  process:
+    interval: 2.0
+    cpu_threshold: 80.0
+    ram_threshold: 80.0
+  file:
+    watch_path: "./monitored_directory"
+  log:
+    watch_file: "./logs/system_logs/auth.log"
+    interval: 5.0
+
+detection:
+  confidence_threshold: 0.75
+  model_dir: "./ai_models/trained_models"
+
+server:
+  host: "127.0.0.1"
+  port: 8000

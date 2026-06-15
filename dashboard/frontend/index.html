@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Cyber Shield - Central Command</title>
+    <!-- Include premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- ChartJS for telemetry rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <svg class="shield-icon" viewBox="0 0 24 24">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            AI CYBER SHIELD
+        </div>
+        <div class="status-badge" id="system-status">
+            <div class="status-dot"></div>
+            MONITORING ACTIVATED
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        
+        <!-- Threat Alert Banner -->
+        <div class="alert-banner" id="threat-alert">
+            <div class="alert-info-box">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <div>
+                    <div class="alert-title" id="alert-type">CRITICAL THREAT DETECTED</div>
+                    <div class="alert-desc" id="alert-details">DDoS Attack simulation pattern matched. Active connections count is critical.</div>
+                </div>
+            </div>
+            <button class="btn btn-danger" onclick="dismissAlert()">Acknowledge</button>
+        </div>
+
+        <!-- Metric widgets row -->
+        <div class="metric-row">
+            <div class="metric-card">
+                <div class="metric-header">Active Sockets</div>
+                <div class="metric-value" id="val-connections">0</div>
+                <div class="metric-trend" style="color: var(--success);">✔ Stable Connections</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-header">Traffic Speed</div>
+                <div class="metric-value" id="val-traffic">0 KB/s</div>
+                <div class="metric-trend" style="color: var(--primary);">⇅ Real-time Rx/Tx</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-header">File Mod Rate</div>
+                <div class="metric-value" id="val-file-rate">0 / min</div>
+                <div class="metric-trend" id="val-file-status" style="color: var(--success);">✔ Idle State</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-header">System Anomaly Score</div>
+                <div class="metric-value" id="val-anomaly">0.0%</div>
+                <div class="metric-trend" id="val-anomaly-status" style="color: var(--success);">✔ Safe baseline</div>
+            </div>
+        </div>
+
+        <!-- Charts Area -->
+        <div class="card main-chart-area">
+            <div class="card-title">Network Telemetry Rate</div>
+            <div style="height: 300px; position: relative;">
+                <canvas id="trafficChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Simulator & Controller -->
+        <div class="card control-panel">
+            <div class="card-title">Threat Simulator Dashboard</div>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem; line-height: 1.4;">
+                Inject realistic mock cyber attack patterns to demonstrate machine learning model classification and real-time command dashboard updates.
+            </p>
+            <div class="simulator-grid">
+                <button class="btn btn-active" id="sim-None" onclick="setSim('None')">Normal baseline</button>
+                <button class="btn" id="sim-DDoS" onclick="setSim('DDoS')">DDoS Attack</button>
+                <button class="btn" id="sim-SQL-Injection" onclick="setSim('SQL Injection')">SQL Injection</button>
+                <button class="btn" id="sim-Brute-Force" onclick="setSim('Brute Force')">Brute Force</button>
+                <button class="btn" id="sim-Ransomware" onclick="setSim('Ransomware')">Ransomware</button>
+                <button class="btn" id="sim-Zero-day-Exploit" onclick="setSim('Zero-day Exploit')">Zero-day Exploit</button>
+            </div>
+        </div>
+
+        <!-- Logs activity timeline -->
+        <div class="card logs-area">
+            <div class="card-title">Log Audit Timeline</div>
+            <div class="log-list" id="audit-logs">
+                <div class="log-item">
+                    <span class="log-timestamp">00:00:00</span>
+                    <span class="log-msg">Audit timeline loaded. Waiting for telemetry logs stream...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Process Telemetry -->
+        <div class="card process-area">
+            <div class="card-title">Top Active Processes</div>
+            <div style="max-height: 350px; overflow-y: auto;">
+                <table class="proc-table">
+                    <thead>
+                        <tr>
+                            <th>PID</th>
+                            <th>Name</th>
+                            <th>CPU %</th>
+                            <th>RAM %</th>
+                        </tr>
+                    </thead>
+                    <tbody id="process-list">
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--text-secondary);">Querying active processes...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>
