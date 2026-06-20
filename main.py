@@ -5,6 +5,7 @@ import time
 import asyncio
 import logging
 import threading
+from pathlib import Path
 # pyrefly: ignore [missing-import]
 import uvicorn
 from typing import Dict, Any
@@ -14,6 +15,7 @@ from core.monitor.process_monitor import ProcessMonitor
 from core.monitor.file_monitor import FileMonitor
 from core.monitor.log_monitor import LogMonitor
 from core.detection.ai_detector import AIDetector
+from core.protection import ProtectionController
 from dashboard.backend import api_server
 
 # Set up logging
@@ -37,6 +39,9 @@ class CentralOrchestrator:
         # AI Detector
         model_dir = self.config.get("detection", {}).get("model_dir", "./ai_models/trained_models")
         self.ai_detector = AIDetector(model_dir)
+
+        # Protection controller forecasts developing attacks and protects critical data.
+        self.protection_controller = ProtectionController(self.config)
         
         self.running = False
         self.telemetry_loop_thread = None
@@ -46,7 +51,12 @@ class CentralOrchestrator:
         if os.path.exists(self.settings_path):
             try:
                 with open(self.settings_path, 'r') as f:
-                    return yaml.safe_load(f) or {}
+                    raw_config = yaml.safe_load(f) or {}
+                    monitor_config = raw_config.get("monitors", {})
+                    # Keep legacy top-level monitor keys available to existing classes.
+                    for key in ("network", "process", "file", "log"):
+                        raw_config.setdefault(key, monitor_config.get(key, {}))
+                    return raw_config
             except Exception as e:
                 logger.error(f"Error loading configuration: {e}")
         return {}
@@ -76,6 +86,12 @@ class CentralOrchestrator:
     def trigger_simulation(self, attack_type: str | None):
         """Triggers system metrics simulation state for testing UI visualization."""
         self.current_simulation = attack_type
+        if not attack_type or attack_type == "None":
+            self.protection_controller.prevention_failed = False
+            if self.protection_controller.data_isolator.is_active:
+                self.protection_controller.data_isolator.restore_files()
+        
+        self._ensure_simulation_snapshot_source(attack_type)
         
         # propagate to child monitors to generate characteristics
         self.network_monitor.trigger_simulated_attack(attack_type)
@@ -84,12 +100,18 @@ class CentralOrchestrator:
         self.log_monitor.trigger_simulated_attack(attack_type)
         logger.info(f"Simulation mode set to: {attack_type}")
 
+    def set_prevention_failure(self, failed: bool):
+        """Sets simulated prevention failure state."""
+        self.protection_controller.prevention_failed = failed
+        logger.info(f"Prevention failure state set to: {failed}")
+
     def get_telemetry(self) -> Dict[str, Any]:
         """Runs predictions and packages comprehensive real-time status."""
         net_feats = self.network_monitor.get_features()
         proc_feats = self.process_monitor.get_features()
         file_feats = self.file_monitor.get_features()
         log_feats = self.log_monitor.get_features()
+        self._apply_simulated_protection_features(net_feats, proc_feats, file_feats, log_feats)
         
         # Aggregate threat detection features
         classification_input = {
@@ -118,7 +140,8 @@ class CentralOrchestrator:
                 "is_threat": self.current_simulation != "None",
                 "attack_type": self.current_simulation,
                 "confidence": 0.94,
-                "severity_score": 90 if self.current_simulation == "DDoS" else 85
+                "severity_score": 90 if self.current_simulation == "DDoS" else 85,
+                "simulated_attack": True,
             }
             if self.current_simulation in ["Ransomware", "Zero-day Exploit"]:
                 anomaly_pred = {
@@ -126,54 +149,107 @@ class CentralOrchestrator:
                     "anomaly_score": 92.5,
                     "decision_score": -0.25
                 }
-            elif self.current_simulation == "DDoS":
-                anomaly_pred = {
-                    "is_anomaly": True,
-                    "anomaly_score": 88.0,
-                    "decision_score": -0.18
-                }
-            elif self.current_simulation == "SQL Injection":
-                anomaly_pred = {
-                    "is_anomaly": True,
-                    "anomaly_score": 54.2,
-                    "decision_score": -0.05
-                }
-        
-        # Determine mitigation action taken by the shield
-        protection_status = {
-            "status": "Safe baseline",
-            "action_taken": "continuous passive threat monitoring active.",
-            "is_mitigating": False
-        }
-        
-        if threat_pred.get("is_threat"):
-            attack = threat_pred.get("attack_type")
-            protection_status["is_mitigating"] = True
-            protection_status["status"] = "ACTIVE MITIGATION IN PROGRESS"
-            if attack == "DDoS" or attack == "DDoS Attack":
-                protection_status["action_taken"] = "Rate-limiting activated. Blocked 350 spam IP addresses. Traffic dropped to safe threshold. Core network safeguarded."
-            elif attack == "SQL Injection":
-                protection_status["action_taken"] = "WAF rule triggered: Blocked request payload. Sanitized database inputs. Threat IP quarantined: 198.51.100.12."
-            elif attack == "Brute Force":
-                protection_status["action_taken"] = "Account Lockout Policy triggered. Suspicious IP 185.220.101.4 blacklisted. Authentication rate-limit applied."
-            elif attack == "Ransomware":
-                protection_status["action_taken"] = "Isolated crypt_locker.exe (PID 9999) from filesystem access. Restored files from secure shadow-copies."
-            elif attack == "Zero-day Exploit":
-                protection_status["action_taken"] = "Sandboxed process execution container. Blocked command-and-control server requests. Kernel patching simulation applied."
-        elif anomaly_pred.get("is_anomaly"):
-            protection_status["is_mitigating"] = True
-            protection_status["status"] = "ANOMALY LOAD BALANCING ACTIVE"
-            protection_status["action_taken"] = "High system load mitigation active. Automatic process isolation initialized."
+
+        process_status = self.process_monitor.get_status()
+        file_status = self.file_monitor.get_status()
+        self._apply_simulated_status(process_status, file_status)
+
+        protection_status = self.protection_controller.evaluate(
+            classification_input,
+            anomaly_input,
+            file_feats,
+            log_feats,
+            threat_pred,
+            anomaly_pred,
+            process_status,
+            self.network_monitor.get_status(),
+        )
         
         return {
             "network": self.network_monitor.get_status(),
-            "process": self.process_monitor.get_status(),
-            "file": self.file_monitor.get_status(),
+            "process": process_status,
+            "file": file_status,
             "log": self.log_monitor.get_status(),
             "threat": threat_pred,
             "anomaly": anomaly_pred,
             "protection": protection_status
         }
+
+    def _apply_simulated_protection_features(
+        self,
+        net_feats: Dict[str, Any],
+        proc_feats: Dict[str, Any],
+        file_feats: Dict[str, Any],
+        log_feats: Dict[str, Any],
+    ):
+        """Make simulator inputs deterministic for forecasting and protection."""
+        if self.current_simulation == "DDoS":
+            net_feats["connection_count"] = max(net_feats.get("connection_count", 0), 850)
+            net_feats["unique_ips"] = max(net_feats.get("unique_ips", 0), 360)
+            net_feats["bytes_recv_rate"] = max(net_feats.get("bytes_recv_rate", 0), 5_000_000.0)
+        elif self.current_simulation == "SQL Injection":
+            net_feats["connection_count"] = max(net_feats.get("connection_count", 0), 180)
+            log_feats["failed_login_count"] = max(log_feats.get("failed_login_count", 0), 8)
+        elif self.current_simulation == "Brute Force":
+            log_feats["failed_login_count"] = max(log_feats.get("failed_login_count", 0), 40)
+        elif self.current_simulation == "Ransomware":
+            file_feats["file_modification_rate"] = max(file_feats.get("file_modification_rate", 0), 145)
+            proc_feats["system_cpu"] = max(proc_feats.get("system_cpu", 0), 92.5)
+            proc_feats["system_ram"] = max(proc_feats.get("system_ram", 0), 84.0)
+            proc_feats["high_cpu_procs"] = max(proc_feats.get("high_cpu_procs", 0), 2)
+        elif self.current_simulation == "Zero-day Exploit":
+            proc_feats["system_cpu"] = max(proc_feats.get("system_cpu", 0), 78.0)
+            proc_feats["system_ram"] = max(proc_feats.get("system_ram", 0), 96.0)
+            proc_feats["high_cpu_procs"] = max(proc_feats.get("high_cpu_procs", 0), 1)
+
+    def _ensure_simulation_snapshot_source(self, attack_type: str | None):
+        """Seed harmless critical data so simulator snapshots are visible."""
+        if not attack_type or attack_type == "None":
+            return
+
+        scanner = self.protection_controller.backup_manager.scanner
+        if scanner.find_critical_files():
+            return
+
+        extension = ".txt" if ".txt" in scanner.critical_extensions else sorted(scanner.critical_extensions)[0]
+        for raw_path in scanner.critical_paths:
+            try:
+                base_path = Path(raw_path).expanduser().resolve()
+                if base_path.suffix.lower() in scanner.critical_extensions:
+                    target = base_path
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                else:
+                    base_path.mkdir(parents=True, exist_ok=True)
+                    target = base_path / f"simulated_critical_data{extension}"
+
+                if not target.exists():
+                    target.write_text(
+                        "AI Cyber Shield simulator demo data.\n"
+                        f"Created so the {attack_type} simulation can record a visible protection snapshot.\n",
+                        encoding="utf-8",
+                    )
+                logger.info("Seeded simulator snapshot source: %s", target)
+                return
+            except OSError as exc:
+                logger.warning("Unable to seed simulator snapshot source at %s: %s", raw_path, exc)
+
+    def _apply_simulated_status(self, process_status: Dict[str, Any], file_status: Dict[str, Any]):
+        """Keep dashboard status aligned with simulator features."""
+        if self.current_simulation == "Ransomware":
+            file_status["modification_rate"] = max(file_status.get("modification_rate", 0), 145)
+            if not file_status.get("event_history"):
+                file_status["event_history"] = []
+            if not file_status["event_history"] or file_status["event_history"][0].get("filename") != "critical_data.docx.locked":
+                file_status["event_history"].insert(0, {
+                    "timestamp": time.strftime("%H:%M:%S"),
+                    "type": "MODIFIED",
+                    "filename": "critical_data.docx.locked",
+                    "path": os.path.join(self.file_monitor.watch_path, "critical_data.docx.locked")
+                })
+            process_status["system_cpu"] = max(process_status.get("system_cpu", 0), 92.5)
+            process_status["system_ram"] = max(process_status.get("system_ram", 0), 84.0)
+        elif self.current_simulation == "Zero-day Exploit":
+            process_status["system_ram"] = max(process_status.get("system_ram", 0), 96.0)
 
     def _telemetry_broadcast_loop(self):
         """Asynchronously queries telemetry values and broadcasts to connected Websocket channels."""

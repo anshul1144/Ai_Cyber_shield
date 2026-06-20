@@ -57,6 +57,14 @@ def post_simulate_attack(attack_type: str):
         return {"status": "error", "message": "Unknown attack simulation type"}
     return {"status": "error", "message": "Orchestrator not initialized"}
 
+@app.post("/api/simulate/failure/{failed}")
+def post_simulate_failure(failed: bool):
+    """Toggles simulated prevention failure state."""
+    if system_orchestrator:
+        system_orchestrator.set_prevention_failure(failed)
+        return {"status": "success", "message": f"Prevention failure state set to {failed}"}
+    return {"status": "error", "message": "Orchestrator not initialized"}
+
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
@@ -71,6 +79,10 @@ async def websocket_endpoint(websocket: WebSocket):
                 attack_type = cmd.get("attack_type")
                 if system_orchestrator:
                     system_orchestrator.trigger_simulation(attack_type if attack_type != "None" else None)
+            elif action == "toggle_prevention_failure":
+                failed = bool(cmd.get("failed", False))
+                if system_orchestrator:
+                    system_orchestrator.set_prevention_failure(failed)
             
     except WebSocketDisconnect:
         manager.disconnect(websocket)

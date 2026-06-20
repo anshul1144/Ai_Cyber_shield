@@ -95,34 +95,6 @@ class ProcessMonitor:
                     "cpu_percent": 45.0,
                     "memory_percent": 35.2
                 })
-            elif self.simulated_attack_type == "DDoS":
-                # DDoS triggers high CPU spike on web server daemon
-                self.system_cpu = max(self.system_cpu, 85.0)
-                self.top_processes.insert(0, {
-                    "pid": 4444,
-                    "name": "nginx.exe",
-                    "cpu_percent": 78.5,
-                    "memory_percent": 14.8
-                })
-            elif self.simulated_attack_type == "SQL Injection":
-                # SQL Injection triggers high CPU load on DBMS server
-                self.system_cpu = max(self.system_cpu, 48.0)
-                self.system_ram = max(self.system_ram, 60.0)
-                self.top_processes.insert(0, {
-                    "pid": 3333,
-                    "name": "mysqld.exe",
-                    "cpu_percent": 42.0,
-                    "memory_percent": 24.5
-                })
-            elif self.simulated_attack_type == "Brute Force":
-                # Brute force triggers moderate CPU load on SSH daemon
-                self.system_cpu = max(self.system_cpu, 32.0)
-                self.top_processes.insert(0, {
-                    "pid": 2222,
-                    "name": "sshd.exe",
-                    "cpu_percent": 24.0,
-                    "memory_percent": 3.5
-                })
 
     def trigger_simulated_attack(self, attack_type: str):
         with self.stats_lock:

@@ -97,46 +97,6 @@ class FileMonitor:
                             "filename": "critical_data.docx.locked",
                             "path": os.path.join(self.watch_path, "critical_data.docx.locked")
                         })
-                elif self.simulated_attack_type == "DDoS":
-                    # DDoS: Web server access/error logs modified at high rate
-                    self.modification_rate = max(self.modification_rate, 82)
-                    if not self.event_history or self.event_history[0].get("filename") != "nginx_access.log":
-                        self.event_history.insert(0, {
-                            "timestamp": time.strftime("%H:%M:%S", time.localtime(now)),
-                            "type": "MODIFIED",
-                            "filename": "nginx_access.log",
-                            "path": os.path.join(self.watch_path, "nginx_access.log")
-                        })
-                elif self.simulated_attack_type == "SQL Injection":
-                    # SQL Injection: Database log modification
-                    self.modification_rate = max(self.modification_rate, 18)
-                    if not self.event_history or self.event_history[0].get("filename") != "mysql_audit.log":
-                        self.event_history.insert(0, {
-                            "timestamp": time.strftime("%H:%M:%S", time.localtime(now)),
-                            "type": "MODIFIED",
-                            "filename": "mysql_audit.log",
-                            "path": os.path.join(self.watch_path, "mysql_audit.log")
-                        })
-                elif self.simulated_attack_type == "Brute Force":
-                    # Brute force: auth log updates
-                    self.modification_rate = max(self.modification_rate, 12)
-                    if not self.event_history or self.event_history[0].get("filename") != "auth.log":
-                        self.event_history.insert(0, {
-                            "timestamp": time.strftime("%H:%M:%S", time.localtime(now)),
-                            "type": "MODIFIED",
-                            "filename": "auth.log",
-                            "path": os.path.join(self.watch_path, "auth.log")
-                        })
-                elif self.simulated_attack_type == "Zero-day Exploit":
-                    # Zero-day: core dump created
-                    self.modification_rate = max(self.modification_rate, 32)
-                    if not self.event_history or self.event_history[0].get("filename") != "core_dump_8888.tmp":
-                        self.event_history.insert(0, {
-                            "timestamp": time.strftime("%H:%M:%S", time.localtime(now)),
-                            "type": "CREATED",
-                            "filename": "core_dump_8888.tmp",
-                            "path": os.path.join(self.watch_path, "core_dump_8888.tmp")
-                        })
             time.sleep(1.0)
 
     def trigger_simulated_attack(self, attack_type: str):

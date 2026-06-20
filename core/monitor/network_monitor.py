@@ -130,75 +130,10 @@ class NetworkMonitor:
 
     def get_status(self) -> Dict[str, Any]:
         with self.stats_lock:
-            conn_count = self.connection_count
-            unique_ip_count = len(self.unique_ips)
-            bytes_sent = self.bytes_sent_rate
-            bytes_recv = self.bytes_recv_rate
-            recent_conns = list(self.recent_connections)
-            
-            if self.simulated_attack_type == "DDoS":
-                conn_count = max(conn_count, 856)
-                unique_ip_count = max(unique_ip_count, 350)
-                bytes_recv = max(bytes_recv, 12850000.0) # ~12 MB/s
-                bytes_sent = max(bytes_sent, 620000.0)    # ~600 KB/s
-                # Add mock SYN-flood connections to recent connections
-                mock_ips = ["185.220.101.4", "198.51.100.12", "103.22.201.55", "192.168.1.105"]
-                for i, ip in enumerate(mock_ips):
-                    recent_conns.insert(0, {
-                        "fd": 900 + i,
-                        "family": "AddressFamily.AF_INET",
-                        "type": "TCP",
-                        "local_address": "127.0.0.1:80",
-                        "remote_address": f"{ip}:{50000+i}",
-                        "status": "SYN_RECV"
-                    })
-            elif self.simulated_attack_type == "SQL Injection":
-                conn_count = max(conn_count, 14)
-                unique_ip_count = max(unique_ip_count, 3)
-                bytes_recv = max(bytes_recv, 18500.0)
-                bytes_sent = max(bytes_sent, 86000.0)
-                recent_conns.insert(0, {
-                    "fd": 850,
-                    "family": "AddressFamily.AF_INET",
-                    "type": "TCP",
-                    "local_address": "127.0.0.1:80",
-                    "remote_address": "198.51.100.12:61254",
-                    "status": "ESTABLISHED"
-                })
-            elif self.simulated_attack_type == "Brute Force":
-                conn_count = max(conn_count, 9)
-                unique_ip_count = max(unique_ip_count, 2)
-                bytes_recv = max(bytes_recv, 5200.0)
-                bytes_sent = max(bytes_sent, 9100.0)
-                recent_conns.insert(0, {
-                    "fd": 860,
-                    "family": "AddressFamily.AF_INET",
-                    "type": "TCP",
-                    "local_address": "127.0.0.1:22",
-                    "remote_address": "185.220.101.4:54124",
-                    "status": "ESTABLISHED"
-                })
-            elif self.simulated_attack_type == "Ransomware":
-                conn_count = max(conn_count, 6)
-                bytes_recv = max(bytes_recv, 14200.0)
-                bytes_sent = max(bytes_sent, 48000.0)
-            elif self.simulated_attack_type == "Zero-day Exploit":
-                conn_count = max(conn_count, 8)
-                bytes_recv = max(bytes_recv, 95000.0)
-                bytes_sent = max(bytes_sent, 134000.0)
-                recent_conns.insert(0, {
-                    "fd": 870,
-                    "family": "AddressFamily.AF_INET",
-                    "type": "TCP",
-                    "local_address": "127.0.0.1:443",
-                    "remote_address": "203.0.113.88:49210",
-                    "status": "ESTABLISHED"
-                })
-                
             return {
-                "connection_count": conn_count,
-                "unique_ip_count": unique_ip_count,
-                "bytes_sent_rate": round(bytes_sent, 2),
-                "bytes_recv_rate": round(bytes_recv, 2),
-                "recent_connections": recent_conns[:20]
+                "connection_count": self.connection_count,
+                "unique_ip_count": len(self.unique_ips),
+                "bytes_sent_rate": round(self.bytes_sent_rate, 2),
+                "bytes_recv_rate": round(self.bytes_recv_rate, 2),
+                "recent_connections": self.recent_connections
             }
