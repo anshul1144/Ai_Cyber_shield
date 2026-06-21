@@ -75,6 +75,7 @@ server:
             )
 
             orchestrator = CentralOrchestrator(str(settings_path))
+            orchestrator.set_prevention_failure(True)
             orchestrator.trigger_simulation("Ransomware")
             telemetry = orchestrator.get_telemetry()
 
@@ -126,6 +127,7 @@ server:
             )
 
             orchestrator = CentralOrchestrator(str(settings_path))
+            orchestrator.set_prevention_failure(True)
             orchestrator.trigger_simulation("Ransomware")
             telemetry = orchestrator.get_telemetry()
 
@@ -184,7 +186,7 @@ server:
         protection = telemetry["protection"]
         self.assertEqual(protection["forecast"]["level"], "normal")
         self.assertEqual(protection["active_protocol"]["mode"], "prevention")
-        self.assertEqual(protection["last_action"]["status"], "isolation_active")
+        self.assertEqual(protection["last_action"]["status"], "protection_active")
         self.assertTrue(any(action["type"] == "firewall" for action in protection["active_protocol"]["actions"]))
 
     def test_prevention_failure_isolates_sensitive_information(self):

@@ -695,12 +695,177 @@
 [2026-06-20 09:09:21] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
 [2026-06-20 09:09:29] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
 [2026-06-20 09:09:41] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
-[2026-06-20 09:13:56] systemd: Periodic cleanup task executed successfully.
-[2026-06-20 09:14:04] auth: Connection accepted for user 'developer' from 10.0.0.12
-[2026-06-20 09:14:12] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
-[2026-06-20 09:14:12] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
-[2026-06-20 09:14:12] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
-[2026-06-20 09:14:12] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
-[2026-06-20 09:14:12] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
-[2026-06-20 09:14:20] systemd: Periodic cleanup task executed successfully.
-[2026-06-20 09:14:28] auth: Connection accepted for user 'developer' from 198.51.100.12
+[2026-06-20 09:26:23] auth: Failed login attempt for user 'admin' from 185.220.101.4
+[2026-06-20 09:26:31] auth: Connection accepted for user 'developer' from 10.0.0.12
+[2026-06-20 09:26:39] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:26:39] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:26:39] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:26:39] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:26:39] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:26:47] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:26:47] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:26:47] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:26:47] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:26:47] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:26:55] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:26:55] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:26:55] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:26:55] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:26:55] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:03] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:03] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:03] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:03] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:03] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:12] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:12] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:12] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:12] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:12] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:20] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:20] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:20] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:20] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:20] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:28] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:28] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:28] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:28] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:28] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:36] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:36] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:36] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:36] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:36] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:44] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:44] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:44] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:44] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:44] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:52] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:52] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:52] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:52] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:27:52] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:00] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:00] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:00] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:00] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:00] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:08] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:08] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:08] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:08] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:08] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:16] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:16] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:16] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:16] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:16] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:27] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:27] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:27] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:27] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:28:27] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:02] systemd: Periodic cleanup task executed successfully.
+[2026-06-20 09:38:10] auth: Failed login attempt for user 'admin' from 185.220.101.4
+[2026-06-20 09:38:18] systemd: Periodic cleanup task executed successfully.
+[2026-06-20 09:38:26] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:26] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:26] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:26] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:26] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:34] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:34] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:34] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:34] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:34] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:42] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:42] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:42] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:42] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:42] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:50] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:50] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:50] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:50] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:50] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:58] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:58] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:58] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:58] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:38:58] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-20 09:39:06] auth: Connection accepted for user 'developer' from 185.220.101.4
+[2026-06-20 09:39:14] systemd: Periodic cleanup task executed successfully.
+[2026-06-20 09:39:22] auth: Failed login attempt for user 'admin' from 185.220.101.4
+[2026-06-20 09:39:30] auth: Connection accepted for user 'guest' from 192.168.1.15
+[2026-06-20 09:39:38] systemd: Periodic cleanup task executed successfully.
+[2026-06-20 09:39:49] auth: Connection accepted for user 'developer' from 10.0.0.12
+[2026-06-21 20:34:14] auth: Failed login attempt for user 'root' from 198.51.100.12
+[2026-06-21 20:34:23] auth: Failed login attempt for user 'guest' from 192.168.1.10
+[2026-06-21 20:34:31] auth: Connection accepted for user 'developer' from 192.168.1.10
+[2026-06-21 20:34:39] auth: Failed login attempt for user 'db_user' from 10.0.0.12
+[2026-06-21 20:34:47] auth: Connection accepted for user 'admin' from 192.168.1.15
+[2026-06-21 20:34:55] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:35:03] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:35:11] auth: Connection accepted for user 'root' from 10.0.0.12
+[2026-06-21 20:35:19] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:35:32] auth: Failed login attempt for user 'root' from 185.220.101.4
+[2026-06-21 20:36:23] auth: Failed login attempt for user 'guest' from 192.168.1.15
+[2026-06-21 20:36:32] auth: Failed login attempt for user 'admin' from 185.220.101.4
+[2026-06-21 20:36:40] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:36:48] auth: Connection accepted for user 'admin' from 185.220.101.4
+[2026-06-21 20:37:01] auth: Failed login attempt for user 'developer' from 185.220.101.4
+[2026-06-21 20:50:13] auth: Failed login attempt for user 'admin' from 192.168.1.15
+[2026-06-21 20:50:21] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:50:29] auth: Connection accepted for user 'db_user' from 192.168.1.10
+[2026-06-21 20:50:37] auth: Connection accepted for user 'guest' from 192.168.1.10
+[2026-06-21 20:50:45] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:50:53] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:51:01] auth: Connection accepted for user 'admin' from 198.51.100.12
+[2026-06-21 20:51:09] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:51:17] auth: Failed login attempt for user 'root' from 192.168.1.15
+[2026-06-21 20:51:25] auth: Connection accepted for user 'developer' from 192.168.1.10
+[2026-06-21 20:51:33] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:51:41] auth: Failed login attempt for user 'admin' from 192.168.1.10
+[2026-06-21 20:54:04] auth: Connection accepted for user 'developer' from 192.168.1.10
+[2026-06-21 20:54:12] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:54:20] auth: Connection accepted for user 'developer' from 198.51.100.12
+[2026-06-21 20:54:29] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:54:37] auth: Failed login attempt for user 'db_user' from 10.0.0.12
+[2026-06-21 20:54:45] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:54:53] auth: Failed login attempt for user 'guest' from 10.0.0.12
+[2026-06-21 20:55:01] auth: Failed login attempt for user 'root' from 198.51.100.12
+[2026-06-21 20:55:09] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
+[2026-06-21 20:55:17] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
+[2026-06-21 20:55:25] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
+[2026-06-21 20:55:33] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
+[2026-06-21 20:55:41] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
+[2026-06-21 20:56:42] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:56:50] auth: Connection accepted for user 'guest' from 185.220.101.4
+[2026-06-21 20:56:58] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:57:06] auth: Connection accepted for user 'db_user' from 192.168.1.15
+[2026-06-21 20:57:14] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:57:22] auth: Failed login attempt for user 'root' from 192.168.1.15
+[2026-06-21 20:57:30] auth: Failed login attempt for user 'admin' from 10.0.0.12
+[2026-06-21 20:57:38] auth: Connection accepted for user 'admin' from 185.220.101.4
+[2026-06-21 20:57:46] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:57:54] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-21 20:57:54] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-21 20:57:54] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-21 20:57:54] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-21 20:57:54] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-21 20:58:03] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-21 20:58:03] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-21 20:58:03] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-21 20:58:03] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-21 20:58:03] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-21 20:58:11] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-21 20:58:11] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-21 20:58:11] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-21 20:58:11] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-21 20:58:11] sshd[1024]: Failed login attempt for invalid user admin from 185.220.101.4 port 54124
+[2026-06-21 20:58:19] auth: Failed login attempt for user 'developer' from 185.220.101.4
+[2026-06-21 20:58:27] auth: Failed login attempt for user 'root' from 192.168.1.10
+[2026-06-21 20:58:35] systemd: Periodic cleanup task executed successfully.
+[2026-06-21 20:58:43] auth: Connection accepted for user 'root' from 185.220.101.4

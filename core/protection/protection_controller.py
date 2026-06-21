@@ -150,25 +150,33 @@ class ProtectionController:
             "message": "Host network disconnected (isolated) from internet immediately to contain threat propagation."
         })
 
-        # 2. Protect sensitive information and isolate it
-        iso_res = self.data_isolator.isolate_files()
-        if iso_res["status"] == "activated":
-            actions.append({
-                "type": "isolation",
-                "status": "active",
-                "message": f"Sensitive data protected successfully. Secured in Isolation Vault ({iso_res['count']} files)."
-            })
-        elif iso_res["status"] == "already_active":
-            actions.append({
-                "type": "isolation",
-                "status": "active",
-                "message": f"Sensitive data protected successfully. Remains secured in Isolation Vault ({iso_res['count']} files)."
-            })
+        # 2. Protect sensitive information and isolate it only if prevention has failed (firewall breach)
+        if self.prevention_failed:
+            iso_res = self.data_isolator.isolate_files()
+            if iso_res["status"] == "activated":
+                actions.append({
+                    "type": "isolation",
+                    "status": "active",
+                    "message": f"Sensitive data protected successfully. Secured in Isolation Vault ({iso_res['count']} files)."
+                })
+            elif iso_res["status"] == "already_active":
+                actions.append({
+                    "type": "isolation",
+                    "status": "active",
+                    "message": f"Sensitive data protected successfully. Remains secured in Isolation Vault ({iso_res['count']} files)."
+                })
+            else:
+                actions.append({
+                    "type": "isolation",
+                    "status": "idle",
+                    "message": "No sensitive files found to isolate."
+                })
         else:
+            iso_res = {"status": "disabled", "count": 0}
             actions.append({
                 "type": "isolation",
-                "status": "idle",
-                "message": "No sensitive files found to isolate."
+                "status": "disabled",
+                "message": "Sensitive data isolation idle (prevention shields holding)."
             })
 
         # 2. Dont protect critical files (do NOT back up critical configs or system files)

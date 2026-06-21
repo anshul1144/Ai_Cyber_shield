@@ -19,6 +19,7 @@ let wasIsolationActive = false;
 let notifiedProcessActions = new Set();
 let persistentFrontendEvents = [];
 let didCurrentAttackCycleFail = false;
+let isFirstTick = true;
 
 // Initialize Telemetry Chart
 function initChart() {
@@ -99,7 +100,7 @@ function connectWebSocket() {
         document.getElementById("system-status").style.color = "var(--success)";
         document.getElementById("system-status").style.borderColor = "rgba(16, 185, 129, 0.3)";
         showToast("Shield initiated", "System normally behaves.", "info");
-        speakMessage("Shield initiated and system normally behaves.");
+        speakMessage("Shield initiated.");
         addPersistentFrontendEvent("info", "[AI Shield] Shield initiated and system normally behaves.");
     };
     
@@ -119,6 +120,100 @@ function connectWebSocket() {
 
 // Handle incoming telemetry stream
 function handleTelemetry(data) {
+    // Check for initial load tick to prevent false alert triggers on refresh
+    if (isFirstTick) {
+        isFirstTick = false;
+        wasThreatActive = data.threat.is_threat;
+        wasPreventionFailed = data.protection && data.protection.prevention_failed;
+        wasIsolationActive = data.protection && data.protection.isolation && data.protection.isolation.is_active;
+        lastSeenAttackType = data.threat.is_threat ? data.threat.attack_type : "None";
+        didCurrentAttackCycleFail = wasPreventionFailed;
+        
+        // Initialize process actions set to avoid duplicate notifications on load
+        const actions = (data.protection && data.protection.active_protocol && data.protection.active_protocol.actions) || [];
+        actions.forEach(action => {
+            if (action.type === "process" && action.message.includes("Virus removed successfully")) {
+                notifiedProcessActions.add(action.message);
+            }
+        });
+        
+        // Render initial UI values
+        document.getElementById("val-connections").innerText = data.network.connection_count;
+        const totalTraffic = (data.network.bytes_sent_rate + data.network.bytes_recv_rate) / 1024;
+        document.getElementById("val-traffic").innerText = `${totalTraffic.toFixed(1)} KB/s`;
+        document.getElementById("val-file-rate").innerText = `${data.file.modification_rate} / min`;
+        
+        const fileTrend = document.getElementById("val-file-status");
+        if (data.file.modification_rate > 100) {
+            fileTrend.innerText = "ALERT Extreme Activity";
+            fileTrend.style.color = "var(--danger)";
+        } else if (data.file.modification_rate > 20) {
+            fileTrend.innerText = "WARN High Activity";
+            fileTrend.style.color = "var(--warning)";
+        } else {
+            fileTrend.innerText = "OK Idle State";
+            fileTrend.style.color = "var(--success)";
+        }
+        
+        const anomalyPercent = data.anomaly.anomaly_score;
+        document.getElementById("val-anomaly").innerText = `${anomalyPercent.toFixed(1)}%`;
+        const anomalyTrend = document.getElementById("val-anomaly-status");
+        if (data.anomaly.is_anomaly) {
+            anomalyTrend.innerText = "ALERT Anomaly flag set";
+            anomalyTrend.style.color = "var(--danger)";
+        } else {
+            anomalyTrend.innerText = "OK Safe baseline";
+            anomalyTrend.style.color = "var(--success)";
+        }
+        
+        updateProtectionPanel(data.protection);
+        updateFirewallPanel(data.protection ? data.protection.firewall : null);
+        updateChart(data.network.bytes_recv_rate, data.network.bytes_sent_rate);
+        
+        // Build initial logs
+        const logList = document.getElementById("audit-logs");
+        if (logList) {
+            logList.innerHTML = "";
+            const mergedAuditLogs = [];
+            
+            // Add initial active classification if threat is active
+            if (data.threat.is_threat) {
+                mergedAuditLogs.push({
+                    type: "threat",
+                    timestamp: new Date().toLocaleTimeString(),
+                    message: `[AI Threat Classifier] CLASSIFIED THREAT: ${data.threat.attack_type} (Confidence: ${(data.threat.confidence * 100).toFixed(0)}%)`
+                });
+            }
+            
+            data.file.event_history.slice(0, 8).forEach(evt => {
+                mergedAuditLogs.push({
+                    type: "file",
+                    timestamp: evt.timestamp,
+                    message: `[File System] ${evt.type}: ${evt.filename}`
+                });
+            });
+            
+            data.log.suspicious_entries.slice(0, 10).forEach(ent => {
+                mergedAuditLogs.push({
+                    type: "log",
+                    timestamp: ent.timestamp,
+                    message: `[Audit Log] ${ent.message}`
+                });
+            });
+            
+            mergedAuditLogs.forEach(log => {
+                const div = document.createElement("div");
+                div.className = `log-item ${log.type === 'threat' ? 'threat' : ''}`;
+                div.innerHTML = `
+                    <span class="log-timestamp">${log.timestamp}</span>
+                    <span class="log-msg">${log.message}</span>
+                `;
+                logList.appendChild(div);
+            });
+        }
+        return;
+    }
+
     // 1. Update Core Metric Widgets
     document.getElementById("val-connections").innerText = data.network.connection_count;
     
@@ -252,16 +347,23 @@ function handleTelemetry(data) {
             didCurrentAttackCycleFail = true;
         }
 
+        let spokeFailure = false;
         if (preventionFailed && !wasPreventionFailed) {
             showToast("Protection fails", "Active threat bypassed security shields. Fail-safe isolation initiated.", "danger");
-            speakMessage("Protection fails.");
+            speakMessage("firewall breached isolation starts and files are moved in isolation vault.");
+            spokeFailure = true;
             addPersistentFrontendEvent("threat", "[AI Shield] Protection fails: Malware bypassed prevention layer.");
         }
         
         if (isolationActive && !wasIsolationActive) {
-            showToast("Sensitive data protected successfully", "All critical documents and user files secured in the isolation vault.", "success");
-            speakMessage("Sensitive data protected successfully.");
-            addPersistentFrontendEvent("threat", "[AI Shield] Sensitive data protected successfully: Files secured in isolation vault.");
+            const isRansomware = currentAttack && currentAttack.toLowerCase().includes("ransomware");
+            if (preventionFailed || isRansomware) {
+                showToast("Sensitive data protected successfully", "All critical documents and user files secured in the isolation vault.", "success");
+                if (!spokeFailure) {
+                    speakMessage("Sensitive data protected successfully.");
+                }
+                addPersistentFrontendEvent("threat", "[AI Shield] Sensitive data protected successfully: Files secured in isolation vault.");
+            }
         }
         
         wasThreatActive = true;
