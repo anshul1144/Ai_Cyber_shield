@@ -278,6 +278,11 @@ class UvicornServer(uvicorn.Server):
         pass
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="AI Cyber Shield Command Hub")
+    parser.add_argument("--headless", action="store_true", help="Run without native desktop GUI window")
+    args = parser.parse_args()
+
     logger.info("Initializing AI Cyber Shield Command Hub...")
     orchestrator = CentralOrchestrator()
     orchestrator.start()
@@ -290,29 +295,42 @@ def main():
     host = server_cfg.get("host", "127.0.0.1")
     port = server_cfg.get("port", 8000)
     
-    # Run Uvicorn in a daemon thread
-    def run_server():
-        config = uvicorn.Config(api_server.app, host=host, port=port, log_level="warning")
-        server = UvicornServer(config)
-        server.run()
-        
-    threading.Thread(target=run_server, daemon=True).start()
-    
-    # Automatically open local command UI in a native desktop window upon system start
-    import webview
-    
-    try:
-        logger.info(f"Starting API and command dashboard on http://{host}:{port}")
-        # Give uvicorn server a brief moment to start up
-        time.sleep(1.0)
-        logger.info("Opening AI Cyber Shield Hub window...")
-        webview.create_window("AI Cyber Shield Command Hub", f"http://{host}:{port}", width=1200, height=800)
-        webview.start()
-    except KeyboardInterrupt:
-        pass
-    finally:
-        logger.info("Shutting down monitors...")
-        orchestrator.stop()
+    headless_mode = args.headless or bool(os.environ.get("HEADLESS"))
+    gui_failed = False
+
+    if not headless_mode:
+        try:
+            import webview
+            
+            # Run Uvicorn in a daemon thread
+            def run_server():
+                config = uvicorn.Config(api_server.app, host=host, port=port, log_level="warning")
+                server = UvicornServer(config)
+                server.run()
+                
+            threading.Thread(target=run_server, daemon=True).start()
+            
+            logger.info(f"Starting API and command dashboard on http://{host}:{port}")
+            # Give uvicorn server a brief moment to start up
+            time.sleep(1.0)
+            logger.info("Opening AI Cyber Shield Hub window...")
+            webview.create_window("AI Cyber Shield Command Hub", f"http://{host}:{port}", width=1200, height=800)
+            webview.start()
+        except Exception as exc:
+            logger.warning(f"Failed to start GUI interface: {exc}. Falling back to headless mode.")
+            gui_failed = True
+
+    if headless_mode or gui_failed:
+        logger.info(f"Running in HEADLESS mode. Starting API and command dashboard on http://{host}:{port}")
+        try:
+            config = uvicorn.Config(api_server.app, host=host, port=port, log_level="warning")
+            server = UvicornServer(config)
+            server.run()
+        except KeyboardInterrupt:
+            pass
+        finally:
+            logger.info("Shutting down monitors...")
+            orchestrator.stop()
 
 if __name__ == "__main__":
     main()

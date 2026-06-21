@@ -56,8 +56,16 @@ class AIDetector:
         ]
         
         try:
-            # Predict probabilities
-            probs = self.threat_model.predict_proba([feat_vector])[0]
+            # Use pandas DataFrame to avoid scikit-learn warnings about feature names
+            try:
+                import pandas as pd
+                df = pd.DataFrame([feat_vector], columns=[
+                    "connection_count", "unique_ips", "bytes_sent_rate", "bytes_recv_rate", "failed_login_count"
+                ])
+                probs = self.threat_model.predict_proba(df)[0]
+            except ImportError:
+                # Predict probabilities
+                probs = self.threat_model.predict_proba([feat_vector])[0]
             pred_class = int(np.argmax(probs))
             confidence = float(probs[pred_class])
             
@@ -112,10 +120,19 @@ class AIDetector:
         ]
         
         try:
-            # Isolation forest returns -1 for anomaly, 1 for normal
-            prediction = int(self.anomaly_model.predict([feat_vector])[0])
-            # Isolation forest anomaly score (lower is more anomalous)
-            decision_score = float(self.anomaly_model.decision_function([feat_vector])[0])
+            # Use pandas DataFrame to avoid scikit-learn warnings about feature names
+            try:
+                import pandas as pd
+                df = pd.DataFrame([feat_vector], columns=[
+                    "system_cpu", "system_ram", "process_count", "high_cpu_procs"
+                ])
+                prediction = int(self.anomaly_model.predict(df)[0])
+                decision_score = float(self.anomaly_model.decision_function(df)[0])
+            except ImportError:
+                # Isolation forest returns -1 for anomaly, 1 for normal
+                prediction = int(self.anomaly_model.predict([feat_vector])[0])
+                # Isolation forest anomaly score (lower is more anomalous)
+                decision_score = float(self.anomaly_model.decision_function([feat_vector])[0])
             
             # Convert decision score to 0 - 100 anomaly metric
             # Normally decision_function returns negative values for outliers, positive for inliers
