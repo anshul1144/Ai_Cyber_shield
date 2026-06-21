@@ -2,3 +2,5 @@ streamlit
 PyYAML
 psutil
 cryptography
+fastapi
+uvicorn
