@@ -1,2 +1,2 @@
 AI Cyber Shield simulator demo data.
-Created so the SQL Injection simulation can record a visible protection snapshot.
+Created so the DDoS simulation can record a visible protection snapshot.

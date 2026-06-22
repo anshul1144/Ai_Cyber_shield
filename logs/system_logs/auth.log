@@ -900,3 +900,110 @@
 [2026-06-22 20:58:33] systemd: Periodic cleanup task executed successfully.
 [2026-06-22 20:58:41] systemd: Periodic cleanup task executed successfully.
 [2026-06-22 20:58:56] auth: Connection accepted for user 'admin' from 185.220.101.4
+[2026-06-22 21:55:28] auth: Connection accepted for user 'guest' from 192.168.1.15
+[2026-06-22 21:55:37] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 21:55:45] auth: Connection accepted for user 'db_user' from 192.168.1.15
+[2026-06-22 21:55:53] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 21:56:01] auth: Connection accepted for user 'developer' from 185.220.101.4
+[2026-06-22 21:56:09] auth: Connection accepted for user 'root' from 185.220.101.4
+[2026-06-22 21:56:17] auth: Connection accepted for user 'guest' from 198.51.100.12
+[2026-06-22 21:56:25] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 21:56:33] auth: Connection accepted for user 'root' from 192.168.1.15
+[2026-06-22 21:56:41] auth: Connection accepted for user 'guest' from 192.168.1.10
+[2026-06-22 21:56:49] auth: Failed login attempt for user 'db_user' from 10.0.0.12
+[2026-06-22 21:56:57] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 21:57:06] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 21:57:14] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 21:57:22] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 21:57:30] auth: Connection accepted for user 'admin' from 192.168.1.10
+[2026-06-22 21:57:38] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 21:57:46] auth: Failed login attempt for user 'developer' from 10.0.0.12
+[2026-06-22 21:57:54] auth: Failed login attempt for user 'admin' from 192.168.1.15
+[2026-06-22 21:58:02] auth: Connection accepted for user 'db_user' from 198.51.100.12
+[2026-06-22 21:58:10] auth: Connection accepted for user 'root' from 10.0.0.12
+[2026-06-22 21:58:18] auth: Connection accepted for user 'db_user' from 192.168.1.10
+[2026-06-22 21:58:26] auth: Connection accepted for user 'developer' from 192.168.1.15
+[2026-06-22 21:58:34] auth: Connection accepted for user 'root' from 192.168.1.10
+[2026-06-22 21:58:42] auth: Failed login attempt for user 'guest' from 192.168.1.15
+[2026-06-22 21:58:50] auth: Connection accepted for user 'root' from 192.168.1.10
+[2026-06-22 21:58:58] auth: Connection accepted for user 'db_user' from 198.51.100.12
+[2026-06-22 21:59:06] auth: Connection accepted for user 'developer' from 192.168.1.15
+[2026-06-22 21:59:14] auth: Connection accepted for user 'db_user' from 192.168.1.15
+[2026-06-22 21:59:22] auth: Failed login attempt for user 'admin' from 192.168.1.15
+[2026-06-22 21:59:30] auth: Connection accepted for user 'root' from 10.0.0.12
+[2026-06-22 21:59:38] auth: Connection accepted for user 'guest' from 185.220.101.4
+[2026-06-22 21:59:46] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 21:59:54] auth: Failed login attempt for user 'guest' from 198.51.100.12
+[2026-06-22 22:00:02] auth: Connection accepted for user 'guest' from 192.168.1.10
+[2026-06-22 22:00:10] auth: Failed login attempt for user 'developer' from 10.0.0.12
+[2026-06-22 22:00:18] auth: Failed login attempt for user 'guest' from 192.168.1.15
+[2026-06-22 22:00:26] auth: Connection accepted for user 'admin' from 198.51.100.12
+[2026-06-22 22:00:34] auth: Connection accepted for user 'root' from 10.0.0.12
+[2026-06-22 22:00:42] auth: Connection accepted for user 'admin' from 10.0.0.12
+[2026-06-22 22:00:50] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:00:58] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:01:06] auth: Connection accepted for user 'guest' from 10.0.0.12
+[2026-06-22 22:01:14] auth: Failed login attempt for user 'developer' from 192.168.1.10
+[2026-06-22 22:01:22] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:01:30] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:01:38] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:01:46] auth: Failed login attempt for user 'guest' from 185.220.101.4
+[2026-06-22 22:01:54] auth: Failed login attempt for user 'developer' from 198.51.100.12
+[2026-06-22 22:02:02] auth: Failed login attempt for user 'developer' from 198.51.100.12
+[2026-06-22 22:02:10] auth: Failed login attempt for user 'root' from 185.220.101.4
+[2026-06-22 22:02:18] auth: Connection accepted for user 'root' from 192.168.1.10
+[2026-06-22 22:02:26] auth: Connection accepted for user 'guest' from 185.220.101.4
+[2026-06-22 22:02:34] auth: Connection accepted for user 'developer' from 185.220.101.4
+[2026-06-22 22:02:42] auth: Connection accepted for user 'developer' from 192.168.1.10
+[2026-06-22 22:02:50] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:02:58] auth: Failed login attempt for user 'db_user' from 198.51.100.12
+[2026-06-22 22:03:06] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:03:14] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:03:22] auth: Failed login attempt for user 'developer' from 198.51.100.12
+[2026-06-22 22:03:30] auth: Failed login attempt for user 'db_user' from 185.220.101.4
+[2026-06-22 22:03:38] auth: Connection accepted for user 'root' from 185.220.101.4
+[2026-06-22 22:03:47] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:03:55] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:04:03] auth: Connection accepted for user 'root' from 192.168.1.10
+[2026-06-22 22:04:11] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:04:19] auth: Failed login attempt for user 'guest' from 10.0.0.12
+[2026-06-22 22:04:27] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:04:35] auth: Failed login attempt for user 'guest' from 192.168.1.15
+[2026-06-22 22:04:43] auth: Failed login attempt for user 'guest' from 10.0.0.12
+[2026-06-22 22:04:51] auth: Connection accepted for user 'guest' from 198.51.100.12
+[2026-06-22 22:04:59] auth: Connection accepted for user 'db_user' from 198.51.100.12
+[2026-06-22 22:05:07] auth: Failed login attempt for user 'guest' from 192.168.1.15
+[2026-06-22 22:05:15] auth: Failed login attempt for user 'developer' from 10.0.0.12
+[2026-06-22 22:05:23] auth: Failed login attempt for user 'developer' from 192.168.1.15
+[2026-06-22 22:05:31] auth: Connection accepted for user 'admin' from 192.168.1.10
+[2026-06-22 22:05:39] auth: Connection accepted for user 'developer' from 192.168.1.10
+[2026-06-22 22:05:47] auth: Failed login attempt for user 'admin' from 192.168.1.10
+[2026-06-22 22:05:55] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:06:03] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:06:11] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:06:19] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:06:27] auth: Failed login attempt for user 'admin' from 198.51.100.12
+[2026-06-22 22:06:35] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:06:43] auth: Connection accepted for user 'db_user' from 192.168.1.15
+[2026-06-22 22:06:51] auth: Connection accepted for user 'admin' from 192.168.1.10
+[2026-06-22 22:06:59] auth: Failed login attempt for user 'developer' from 192.168.1.15
+[2026-06-22 22:07:07] auth: Failed login attempt for user 'db_user' from 192.168.1.15
+[2026-06-22 22:07:15] auth: Failed login attempt for user 'admin' from 185.220.101.4
+[2026-06-22 22:07:23] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:07:31] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:07:39] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:07:47] auth: Connection accepted for user 'guest' from 198.51.100.12
+[2026-06-22 22:07:55] auth: Connection accepted for user 'root' from 10.0.0.12
+[2026-06-22 22:08:03] auth: Connection accepted for user 'guest' from 198.51.100.12
+[2026-06-22 22:08:11] auth: Failed login attempt for user 'developer' from 10.0.0.12
+[2026-06-22 22:08:19] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:08:27] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:08:35] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:08:43] auth: Failed login attempt for user 'developer' from 185.220.101.4
+[2026-06-22 22:08:51] auth: Connection accepted for user 'root' from 192.168.1.15
+[2026-06-22 22:08:59] auth: Failed login attempt for user 'root' from 192.168.1.15
+[2026-06-22 22:09:07] auth: Connection accepted for user 'guest' from 198.51.100.12
+[2026-06-22 22:09:15] auth: Failed login attempt for user 'developer' from 185.220.101.4
+[2026-06-22 22:09:23] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 22:09:31] auth: Connection accepted for user 'root' from 192.168.1.10
+[2026-06-22 22:09:39] auth: Failed login attempt for user 'db_user' from 192.168.1.15

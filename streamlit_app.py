@@ -150,10 +150,10 @@ class CentralOrchestrator:
         anomaly_pred = self.ai_detector.analyze_system_anomalies(anomaly_input)
         
         # Inject custom classification response values if threat simulator is active
-        if self.current_simulation:
+        if self.current_simulation is not None and self.current_simulation != "None":
             # Overwrite classification predictions to match the simulation trigger
             threat_pred = {
-                "is_threat": self.current_simulation != "None",
+                "is_threat": True,
                 "attack_type": self.current_simulation,
                 "confidence": 0.94,
                 "severity_score": 90 if self.current_simulation == "DDoS" else 85,
@@ -165,6 +165,26 @@ class CentralOrchestrator:
                     "anomaly_score": 92.5,
                     "decision_score": -0.25
                 }
+            else:
+                anomaly_pred = {
+                    "is_anomaly": False,
+                    "anomaly_score": 0.0,
+                    "decision_score": 0.0
+                }
+        else:
+            # Under baseline conditions, default to safe normal to avoid Streamlit local websocket noise triggering false threats.
+            threat_pred = {
+                "is_threat": False,
+                "attack_type": "Normal",
+                "confidence": 1.0,
+                "severity_score": 0,
+                "simulated_attack": False
+            }
+            anomaly_pred = {
+                "is_anomaly": False,
+                "anomaly_score": 0.0,
+                "decision_score": 0.0
+            }
 
         process_status = self.process_monitor.get_status()
         file_status = self.file_monitor.get_status()
@@ -637,22 +657,10 @@ def run_streamlit_app():
     st.markdown("---")
     m_cols = st.columns(4)
     with m_cols[0]:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-header">Active Sockets</div>
-            <div class="metric-value">{telemetry['network']['connection_count']}</div>
-            <div class="metric-trend" style="color: #10b981;">✔ Stable Connections</div>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(f"<div class='metric-card'><div class='metric-header'>Active Sockets</div><div class='metric-value'>{telemetry['network']['connection_count']}</div><div class='metric-trend' style='color: #10b981;'>✔ Stable Connections</div></div>", unsafe_allow_html=True)
     with m_cols[1]:
         traffic_kb = (telemetry['network']['bytes_sent_rate'] + telemetry['network']['bytes_recv_rate']) / 1024.0
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-header">Traffic Speed</div>
-            <div class="metric-value">{traffic_kb:.1f} KB/s</div>
-            <div class="metric-trend" style="color: #3b82f6;">⇅ Real-time Rx/Tx</div>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(f"<div class='metric-card'><div class='metric-header'>Traffic Speed</div><div class='metric-value'>{traffic_kb:.1f} KB/s</div><div class='metric-trend' style='color: #3b82f6;'>⇅ Real-time Rx/Tx</div></div>", unsafe_allow_html=True)
     with m_cols[2]:
         file_rate = telemetry['file']['modification_rate']
         file_trend = "✔ Idle State"
@@ -663,13 +671,7 @@ def run_streamlit_app():
         elif file_rate > 20:
             file_trend = "⚠ High Activity"
             file_color = "#f59e0b"
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-header">File Mod Rate</div>
-            <div class="metric-value">{file_rate} / min</div>
-            <div class="metric-trend" style="color: {file_color};">{file_trend}</div>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(f"<div class='metric-card'><div class='metric-header'>File Mod Rate</div><div class='metric-value'>{file_rate} / min</div><div class='metric-trend' style='color: {file_color};'>{file_trend}</div></div>", unsafe_allow_html=True)
     with m_cols[3]:
         anomaly_score = telemetry['anomaly']['anomaly_score']
         anomaly_trend = "✔ Safe baseline"
@@ -677,13 +679,7 @@ def run_streamlit_app():
         if telemetry['anomaly']['is_anomaly']:
             anomaly_trend = "⚠ Anomaly flag set"
             anomaly_color = "#ef4444"
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-header">System Anomaly Score</div>
-            <div class="metric-value">{anomaly_score:.1f}%</div>
-            <div class="metric-trend" style="color: {anomaly_color};">{anomaly_trend}</div>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(f"<div class='metric-card'><div class='metric-header'>System Anomaly Score</div><div class='metric-value'>{anomaly_score:.1f}%</div><div class='metric-trend' style='color: {anomaly_color};'>{anomaly_trend}</div></div>", unsafe_allow_html=True)
 
     # Predictive Protection & Traffic Chart
     st.markdown("---")
@@ -696,34 +692,17 @@ def run_streamlit_app():
             risk_score = telemetry['protection']['forecast']['risk_score']
             level = telemetry['protection']['forecast']['level'].upper()
             level_color = "#ef4444" if level == "CRITICAL" else "#f59e0b" if level == "WARNING" else "#10b981"
-            st.markdown(f"""
-            <div style="padding: 1rem; background: rgba(17, 24, 39, 0.4); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; min-height: 120px;">
-                <div class="metric-header">Upcoming Threat Risk</div>
-                <div style="font-size: 2.2rem; font-weight: 800; margin: 0.35rem 0;">{risk_score:.1f}%</div>
-                <div style="font-size: 0.8rem; color: {level_color}; font-weight: 600;">{level}</div>
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown(f"<div style='padding: 1rem; background: rgba(17, 24, 39, 0.4); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; min-height: 120px;'><div class='metric-header'>Upcoming Threat Risk</div><div style='font-size: 2.2rem; font-weight: 800; margin: 0.35rem 0;'>{risk_score:.1f}%</div><div style='font-size: 0.8rem; color: {level_color}; font-weight: 600;'>{level}</div></div>", unsafe_allow_html=True)
         with col_prot_2:
             snapshot_count = telemetry['protection']['backup']['last_snapshot'].get('file_count', 0)
             snapshot_status = telemetry['protection']['backup']['last_snapshot'].get('status', 'Waiting for risk signal')
-            st.markdown(f"""
-            <div style="padding: 1rem; background: rgba(17, 24, 39, 0.4); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; min-height: 120px;">
-                <div class="metric-header">Critical Data Snapshot</div>
-                <div style="font-size: 1.5rem; font-weight: 700; margin: 0.5rem 0;">{snapshot_count} files</div>
-                <div style="font-size: 0.8rem; color: #9ca3af;">{snapshot_status}</div>
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown(f"<div style='padding: 1rem; background: rgba(17, 24, 39, 0.4); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; min-height: 120px;'><div class='metric-header'>Critical Data Snapshot</div><div style='font-size: 1.5rem; font-weight: 700; margin: 0.5rem 0;'>{snapshot_count} files</div><div style='font-size: 0.8rem; color: #9ca3af;'>{snapshot_status}</div></div>", unsafe_allow_html=True)
         with col_prot_3:
             mode = telemetry['protection']['active_protocol']['mode'].replace('_', ' ').upper()
             mode_color = "#ef4444" if mode in ["CONTAINMENT", "ISOLATION"] else "#f59e0b" if mode in ["EARLY GUARD", "PREVENTION"] else "#10b981"
             last_action = telemetry['protection'].get('last_action', {}).get('message', 'No guard action active')
-            st.markdown(f"""
-            <div style="padding: 1rem; background: rgba(17, 24, 39, 0.4); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; min-height: 120px;">
-                <div class="metric-header">Protection Mode</div>
-                <div style="font-size: 1.5rem; font-weight: 700; margin: 0.5rem 0; color: {mode_color};">{mode}</div>
-                <div style="font-size: 0.8rem; color: #9ca3af;">{last_action}</div>
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown(f"<div style='padding: 1rem; background: rgba(17, 24, 39, 0.4); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; min-height: 120px;'><div class='metric-header'>Protection Mode</div><div style='font-size: 1.5rem; font-weight: 700; margin: 0.5rem 0; color: {mode_color};'>{mode}</div><div style='font-size: 0.8rem; color: #9ca3af;'>{last_action}</div></div>", unsafe_allow_html=True)
+
             
         st.markdown("<div style='margin-top: 1rem;'></div>", unsafe_allow_html=True)
         col_sig_1, col_sig_2 = st.columns(2)
@@ -759,12 +738,7 @@ def run_streamlit_app():
                 orig_path = file.get('original_path', '')
                 sizeKB = file.get('bytes', 0) / 1024.0
                 base = os.path.basename(orig_path)
-                st.markdown(f"""
-                <div class="vault-file-item">
-                    <span class="vault-file-name">🔒 {filename}.isolated</span>
-                    <span class="vault-file-meta">Moved: {base} ({sizeKB:.2f} KB)</span>
-                </div>
-                """, unsafe_allow_html=True)
+                st.markdown(f"<div class='vault-file-item'><span class='vault-file-name'>🔒 {filename}.isolated</span><span class='vault-file-meta'>Moved: {base} ({sizeKB:.2f} KB)</span></div>", unsafe_allow_html=True)
 
     with col_mid_2:
         st.markdown("### Network Telemetry Rate")
@@ -804,14 +778,7 @@ def run_streamlit_app():
         l1_metric = f"{len(blocked_ips)} blocked IPs"
         l1_details = ", ".join(blocked_ips) if blocked_ips else "No IPs blocked"
         with fw_cols[0]:
-            st.markdown(f"""
-            <div class="firewall-layer-card {l1_violation}">
-                <div class="layer-badge">L1</div>
-                <div class="layer-title">Network IP Filter</div>
-                <div class="layer-metric">{l1_metric}</div>
-                <div class="layer-details">{l1_details}</div>
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown(f"<div class='firewall-layer-card {l1_violation}'><div class='layer-badge'>L1</div><div class='layer-title'>Network IP Filter</div><div class='layer-metric'>{l1_metric}</div><div class='layer-details'>{l1_details}</div></div>", unsafe_allow_html=True)
 
         # L2: Transport Port Guard
         blocked_ports = firewall.get("blocked_ports", [])
@@ -819,14 +786,7 @@ def run_streamlit_app():
         l2_metric = f"{len(blocked_ports)} blocked ports"
         l2_details = ", ".join(f"Port {p}" for p in blocked_ports) if blocked_ports else "No ports blocked"
         with fw_cols[1]:
-            st.markdown(f"""
-            <div class="firewall-layer-card {l2_violation}">
-                <div class="layer-badge">L2</div>
-                <div class="layer-title">Transport Port Guard</div>
-                <div class="layer-metric">{l2_metric}</div>
-                <div class="layer-details">{l2_details}</div>
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown(f"<div class='firewall-layer-card {l2_violation}'><div class='layer-badge'>L2</div><div class='layer-title'>Transport Port Guard</div><div class='layer-metric'>{l2_metric}</div><div class='layer-details'>{l2_details}</div></div>", unsafe_allow_html=True)
 
         # L3: Application Inspector
         payloads_scanned = firewall.get("payloads_scanned", 0)
@@ -835,14 +795,7 @@ def run_streamlit_app():
         l3_metric = f"{payloads_scanned} scanned"
         l3_details = f"{anomalies} anomalies detected" if anomalies > 0 else "No anomalies detected"
         with fw_cols[2]:
-            st.markdown(f"""
-            <div class="firewall-layer-card {l3_violation}">
-                <div class="layer-badge">L3</div>
-                <div class="layer-title">Application Inspector</div>
-                <div class="layer-metric">{l3_metric}</div>
-                <div class="layer-details">{l3_details}</div>
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown(f"<div class='firewall-layer-card {l3_violation}'><div class='layer-badge'>L3</div><div class='layer-title'>Application Inspector</div><div class='layer-metric'>{l3_metric}</div><div class='layer-details'>{l3_details}</div></div>", unsafe_allow_html=True)
 
         # L4: Process Binding Guard
         proc_verified = firewall.get("processes_verified", 0)
@@ -851,14 +804,7 @@ def run_streamlit_app():
         l4_metric = f"{proc_verified} verified"
         l4_details = f"{proc_violations} violations blocked" if proc_violations > 0 else "All bindings safe"
         with fw_cols[3]:
-            st.markdown(f"""
-            <div class="firewall-layer-card {l4_violation}">
-                <div class="layer-badge">L4</div>
-                <div class="layer-title">Process Binding Guard</div>
-                <div class="layer-metric">{l4_metric}</div>
-                <div class="layer-details">{l4_details}</div>
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown(f"<div class='firewall-layer-card {l4_violation}'><div class='layer-badge'>L4</div><div class='layer-title'>Process Binding Guard</div><div class='layer-metric'>{l4_metric}</div><div class='layer-details'>{l4_details}</div></div>", unsafe_allow_html=True)
 
         # L5: Behavioral Rate Limiter
         rate_violations = firewall.get("rate_violations", 0)
@@ -866,14 +812,8 @@ def run_streamlit_app():
         l5_metric = f"{rate_violations} violations"
         l5_details = "Traffic spike blocked" if rate_violations > 0 else "Traffic within baseline"
         with fw_cols[4]:
-            st.markdown(f"""
-            <div class="firewall-layer-card {l5_violation}">
-                <div class="layer-badge">L5</div>
-                <div class="layer-title">Behavioral Rate Limiter</div>
-                <div class="layer-metric">{l5_metric}</div>
-                <div class="layer-details">{l5_details}</div>
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown(f"<div class='firewall-layer-card {l5_violation}'><div class='layer-badge'>L5</div><div class='layer-title'>Behavioral Rate Limiter</div><div class='layer-metric'>{l5_metric}</div><div class='layer-details'>{l5_details}</div></div>", unsafe_allow_html=True)
+
 
     # Simulator & logs / processes
     st.markdown("---")
@@ -926,32 +866,10 @@ def run_streamlit_app():
             for proc in telemetry['process'].get('top_processes', []):
                 cpu_style = 'color: #ef4444;' if proc['cpu_percent'] > 50 else ''
                 ram_style = 'color: #f59e0b;' if proc['memory_percent'] > 30 else ''
-                proc_rows += f"""
-                <tr>
-                    <td style="padding: 0.5rem;">{proc['pid']}</td>
-                    <td style="padding: 0.5rem; font-weight: 600;">{proc['name']}</td>
-                    <td style="padding: 0.5rem; {cpu_style}">{proc['cpu_percent']}%</td>
-                    <td style="padding: 0.5rem; {ram_style}">{proc['memory_percent']}%</td>
-                </tr>
-                """
+                proc_rows += f"<tr><td style='padding: 0.5rem;'>{proc['pid']}</td><td style='padding: 0.5rem; font-weight: 600;'>{proc['name']}</td><td style='padding: 0.5rem; {cpu_style}'>{proc['cpu_percent']}%</td><td style='padding: 0.5rem; {ram_style}'>{proc['memory_percent']}%</td></tr>"
             if not proc_rows:
-                proc_rows = '<tr><td colspan="4" style="text-align: center; color: #9ca3af; padding: 0.5rem;">Querying active processes...</td></tr>'
-                
-            st.markdown(f"""
-            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
-                <thead>
-                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.08); text-align: left; color: #9ca3af;">
-                        <th style="padding: 0.5rem;">PID</th>
-                        <th style="padding: 0.5rem;">Name</th>
-                        <th style="padding: 0.5rem;">CPU %</th>
-                        <th style="padding: 0.5rem;">RAM %</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {proc_rows}
-                </tbody>
-            </table>
-            """, unsafe_allow_html=True)
+                proc_rows = "<tr><td colspan='4' style='text-align: center; color: #9ca3af; padding: 0.5rem;'>Querying active processes...</td></tr>"
+            st.html(f"<table style='width: 100%; border-collapse: collapse; font-size: 0.9rem;'><thead><tr style='border-bottom: 1px solid rgba(255, 255, 255, 0.08); text-align: left; color: #9ca3af;'><th style='padding: 0.5rem;'>PID</th><th style='padding: 0.5rem;'>Name</th><th style='padding: 0.5rem;'>CPU %</th><th style='padding: 0.5rem;'>RAM %</th></tr></thead><tbody>{proc_rows}</tbody></table>")
             
         with tab_logs:
             with st.container(height=300):
@@ -981,16 +899,12 @@ def run_streamlit_app():
                         "message": f"[Audit Log] {ent.get('message', '')}"
                     })
                 if not merged_logs:
-                    st.markdown('<div class="log-item"><span class="log-timestamp">INFO</span><span class="log-msg">Scanning channels active... No anomalies identified.</span></div>', unsafe_allow_html=True)
+                    st.markdown("<div class='log-item'><span class='log-timestamp'>INFO</span><span class='log-msg'>Scanning channels active... No anomalies identified.</span></div>", unsafe_allow_html=True)
                 else:
                     for log in merged_logs:
                         threat_class = "threat" if log['type'] == 'threat' else ""
-                        st.markdown(f"""
-                        <div class="log-item {threat_class}" style="margin-bottom: 0.25rem;">
-                            <span class="log-timestamp">{log['timestamp']}</span>
-                            <span class="log-msg" style="margin-left: 1rem;">{log['message']}</span>
-                        </div>
-                        """, unsafe_allow_html=True)
+                        st.markdown(f"<div class='log-item {threat_class}' style='margin-bottom: 0.25rem;'><span class='log-timestamp'>{log['timestamp']}</span><span class='log-msg' style='margin-left: 1rem;'>{log['message']}</span></div>", unsafe_allow_html=True)
+
 
     # Refresh
     import time
