@@ -577,6 +577,8 @@ def run_streamlit_app():
 
     orchestrator = get_cached_orchestrator()
     telemetry = orchestrator.get_telemetry()
+    prevention_failed = telemetry.get('protection', {}).get('prevention_failed', False)
+
 
     # Header
     header_col1, header_col2 = st.columns([8, 4])
@@ -912,7 +914,7 @@ def run_streamlit_app():
                 
         st.markdown("<div style='margin-top: 1rem;'></div>", unsafe_allow_html=True)
         toggle_fail = st.toggle("Simulate Prevention Failure (Force shield failure & isolate sensitive files)", value=prevention_failed)
-        if toggle_fail != prevention_failed:
+        if toggle_fail != prevention_failed: 
             orchestrator.set_prevention_failure(toggle_fail)
             st.rerun()
             
