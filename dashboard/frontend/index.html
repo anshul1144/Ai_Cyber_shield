@@ -162,34 +162,6 @@
             </div>
         </div>
 
-        <!-- Simulator & Controller -->
-        <div class="card control-panel">
-            <div class="card-title">Threat Simulator Dashboard</div>
-            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem; line-height: 1.4;">
-                Inject realistic mock cyber attack patterns to demonstrate machine learning model classification and real-time command dashboard updates.
-            </p>
-            <div class="simulator-grid">
-                <button class="btn btn-active" id="sim-None" onclick="setSim('None')">Normal baseline</button>
-                <button class="btn" id="sim-DDoS" onclick="setSim('DDoS')">DDoS Attack</button>
-                <button class="btn" id="sim-SQL-Injection" onclick="setSim('SQL Injection')">SQL Injection</button>
-                <button class="btn" id="sim-Brute-Force" onclick="setSim('Brute Force')">Brute Force</button>
-                <button class="btn" id="sim-Ransomware" onclick="setSim('Ransomware')">Ransomware</button>
-                <button class="btn" id="sim-Zero-day-Exploit" onclick="setSim('Zero-day Exploit')">Zero-day Exploit</button>
-            </div>
-            <div class="simulator-options" style="margin-top: 1.25rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <div style="font-weight: 600; font-size: 0.9rem;">Simulate Prevention Failure</div>
-                        <div style="color: var(--text-secondary); font-size: 0.75rem;">Force shield failure & isolate sensitive files</div>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="toggle-failure" onchange="toggleFailureState()">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
-
         <!-- Logs activity timeline -->
         <div class="card logs-area">
             <div class="card-title">Log Audit Timeline</div>

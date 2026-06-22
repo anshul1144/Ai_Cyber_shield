@@ -20,6 +20,8 @@ let notifiedProcessActions = new Set();
 let persistentFrontendEvents = [];
 let didCurrentAttackCycleFail = false;
 let isFirstTick = true;
+let lastAnnouncementId = null;
+
 
 // Initialize Telemetry Chart
 function initChart() {
@@ -100,9 +102,9 @@ function connectWebSocket() {
         document.getElementById("system-status").style.color = "var(--success)";
         document.getElementById("system-status").style.borderColor = "rgba(16, 185, 129, 0.3)";
         showToast("Shield initiated", "System normally behaves.", "info");
-        speakMessage("Shield initiated.");
         addPersistentFrontendEvent("info", "[AI Shield] Shield initiated and system normally behaves.");
     };
+
     
     socket.onclose = () => {
         console.warn("WebSocket disconnected. Retrying in 3 seconds...");
@@ -128,6 +130,8 @@ function handleTelemetry(data) {
         wasIsolationActive = data.protection && data.protection.isolation && data.protection.isolation.is_active;
         lastSeenAttackType = data.threat.is_threat ? data.threat.attack_type : "None";
         didCurrentAttackCycleFail = wasPreventionFailed;
+        lastAnnouncementId = data.announcement ? data.announcement.id : 0;
+
         
         // Initialize process actions set to avoid duplicate notifications on load
         const actions = (data.protection && data.protection.active_protocol && data.protection.active_protocol.actions) || [];
@@ -323,7 +327,6 @@ function handleTelemetry(data) {
                 if (!notifiedProcessActions.has(action.message)) {
                     notifiedProcessActions.add(action.message);
                     showToast("Virus removed successfully", action.message, "success");
-                    speakMessage("Virus removed successfully.");
                     addPersistentFrontendEvent("threat", `[AI Shield] Virus removed successfully: Suspect process terminated.`);
                 }
             }
@@ -339,7 +342,6 @@ function handleTelemetry(data) {
             didCurrentAttackCycleFail = false;
             showDefenseModal();
             showToast("We are under attack", "Protection mode activated.", "warning");
-            speakMessage("We are under attack and protection mode activated.");
             addPersistentFrontendEvent("threat", `[AI Shield] We are under attack and protection mode activated.`);
         }
         
@@ -347,11 +349,8 @@ function handleTelemetry(data) {
             didCurrentAttackCycleFail = true;
         }
 
-        let spokeFailure = false;
         if (preventionFailed && !wasPreventionFailed) {
             showToast("Protection fails", "Active threat bypassed security shields. Fail-safe isolation initiated.", "danger");
-            speakMessage("firewall breached isolation starts and files are moved in isolation vault.");
-            spokeFailure = true;
             addPersistentFrontendEvent("threat", "[AI Shield] Protection fails: Malware bypassed prevention layer.");
         }
         
@@ -359,9 +358,6 @@ function handleTelemetry(data) {
             const isRansomware = currentAttack && currentAttack.toLowerCase().includes("ransomware");
             if (preventionFailed || isRansomware) {
                 showToast("Sensitive data protected successfully", "All critical documents and user files secured in the isolation vault.", "success");
-                if (!spokeFailure) {
-                    speakMessage("Sensitive data protected successfully.");
-                }
                 addPersistentFrontendEvent("threat", "[AI Shield] Sensitive data protected successfully: Files secured in isolation vault.");
             }
         }
@@ -382,11 +378,9 @@ function handleTelemetry(data) {
         if (wasThreatActive) {
             if (didCurrentAttackCycleFail) {
                 showToast("System breached", "Attack cleared, but prevention layer failed.", "danger");
-                speakMessage("System breached.");
                 addPersistentFrontendEvent("threat", "[AI Shield] System breached: Protection failed and system fallback triggered.");
             } else {
                 showToast("Successfully protected", "Threat mitigated and security shields are holding.", "success");
-                speakMessage("Successfully protected.");
                 addPersistentFrontendEvent("threat", "[AI Shield] Successfully protected: Threat mitigated, system security restored.");
             }
             notifiedProcessActions.clear();
@@ -401,6 +395,14 @@ function handleTelemetry(data) {
             lastSeenAttackType = null;
             modalDismissedForAttack = false;
             closeDefenseModal();
+        }
+    }
+
+    // Unified voice announcement system from backend state
+    if (data.announcement && data.announcement.id > lastAnnouncementId) {
+        lastAnnouncementId = data.announcement.id;
+        if (data.announcement.text) {
+            speakMessage(data.announcement.text);
         }
     }
     

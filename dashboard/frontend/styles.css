@@ -200,8 +200,9 @@ header {
 
 /* Grid Sections */
 .main-chart-area {
-    grid-column: span 8;
+    grid-column: span 12;
 }
+
 
 .protection-area {
     grid-column: span 12;

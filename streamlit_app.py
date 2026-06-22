@@ -46,6 +46,9 @@ class CentralOrchestrator:
         self.running = False
         self.telemetry_loop_thread = None
         self.current_simulation = None
+        self.announcement_text = None
+        self.announcement_id = 0
+
 
     def _load_config(self) -> Dict[str, Any]:
         if os.path.exists(self.settings_path):
@@ -99,11 +102,24 @@ class CentralOrchestrator:
         self.file_monitor.trigger_simulated_attack(attack_type)
         self.log_monitor.trigger_simulated_attack(attack_type)
         logger.info(f"Simulation mode set to: {attack_type}")
+        
+        self.announcement_id += 1
+        if attack_type and attack_type != "None":
+            self.announcement_text = f"We are under attack. {attack_type} detected, and protection mode is activated."
+        else:
+            self.announcement_text = "Threat mitigated. Security shields are holding."
 
     def set_prevention_failure(self, failed: bool):
         """Sets simulated prevention failure state."""
         self.protection_controller.prevention_failed = failed
         logger.info(f"Prevention failure state set to: {failed}")
+        
+        self.announcement_id += 1
+        if failed:
+            self.announcement_text = "Firewall breached. Isolation starts, and files are moved to the isolation vault."
+        else:
+            self.announcement_text = "Prevention failure state resolved. Restoring isolated files."
+
 
     def get_telemetry(self) -> Dict[str, Any]:
         """Runs predictions and packages comprehensive real-time status."""
@@ -172,8 +188,13 @@ class CentralOrchestrator:
             "log": self.log_monitor.get_status(),
             "threat": threat_pred,
             "anomaly": anomaly_pred,
-            "protection": protection_status
+            "protection": protection_status,
+            "announcement": {
+                "text": self.announcement_text,
+                "id": self.announcement_id
+            }
         }
+
 
     def _apply_simulated_protection_features(
         self,
@@ -586,29 +607,17 @@ def run_streamlit_app():
         """)
 
     # Speech Synthesis Announcements
-    if "last_threat_state" not in st.session_state:
-        st.session_state.last_threat_state = False
-    if "last_prevention_failed" not in st.session_state:
-        st.session_state.last_prevention_failed = False
-    if "last_isolation_active" not in st.session_state:
-        st.session_state.last_isolation_active = False
+    announcement = telemetry.get('announcement', {})
+    announcement_id = announcement.get('id', 0)
+    announcement_text = announcement.get('text', None)
 
-    prevention_failed = telemetry['protection'].get('prevention_failed', False)
-    isolation_active = telemetry['protection'].get('isolation', {}).get('is_active', False)
+    if "last_announcement_id" not in st.session_state:
+        st.session_state.last_announcement_id = announcement_id
 
     speak_text = None
-    if is_threat and not st.session_state.last_threat_state:
-        speak_text = f"We are under attack. {attack_type} detected, and protection mode is activated."
-    elif not is_threat and st.session_state.last_threat_state:
-        speak_text = "Threat mitigated. Security shields are holding."
-
-    if prevention_failed and not st.session_state.last_prevention_failed:
-        speak_text = "Firewall breached. Isolation starts, files moved to isolation vault."
-
-    # Update states
-    st.session_state.last_threat_state = is_threat
-    st.session_state.last_prevention_failed = prevention_failed
-    st.session_state.last_isolation_active = isolation_active
+    if announcement_id > st.session_state.last_announcement_id:
+        speak_text = announcement_text
+        st.session_state.last_announcement_id = announcement_id
 
     if speak_text:
         st.components.v1.html(f"""
@@ -620,6 +629,7 @@ def run_streamlit_app():
             }}
             </script>
         """, height=0)
+
 
     # Metric Widgets
     st.markdown("---")
