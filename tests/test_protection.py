@@ -7,7 +7,8 @@ from pathlib import Path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from core.detection.threat_forecaster import ThreatForecaster
-from main import CentralOrchestrator
+from streamlit_app import CentralOrchestrator
+
 
 
 class TestProtection(unittest.TestCase):

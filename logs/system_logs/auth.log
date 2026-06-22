@@ -875,3 +875,28 @@
 [2026-06-21 22:15:14] systemd: Periodic cleanup task executed successfully.
 [2026-06-21 22:15:22] systemd: Periodic cleanup task executed successfully.
 [2026-06-21 22:15:38] auth: Failed login attempt for user 'admin' from 10.0.0.12
+[2026-06-22 20:17:50] auth: Connection accepted for user 'guest' from 192.168.1.10
+[2026-06-22 20:17:58] auth: Failed login attempt for user 'guest' from 192.168.1.15
+[2026-06-22 20:18:06] auth: Connection accepted for user 'developer' from 192.168.1.10
+[2026-06-22 20:18:30] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 20:18:38] auth: Failed login attempt for user 'guest' from 198.51.100.12
+[2026-06-22 20:18:46] auth: Connection accepted for user 'guest' from 192.168.1.15
+[2026-06-22 20:18:54] auth: Connection accepted for user 'db_user' from 192.168.1.15
+[2026-06-22 20:19:02] auth: Failed login attempt for user 'guest' from 192.168.1.10
+[2026-06-22 20:19:10] auth: Failed login attempt for user 'db_user' from 198.51.100.12
+[2026-06-22 20:19:18] auth: Failed login attempt for user 'db_user' from 192.168.1.10
+[2026-06-22 20:19:26] auth: Connection accepted for user 'root' from 192.168.1.10
+[2026-06-22 20:39:32] auth: Failed login attempt for user 'guest' from 10.0.0.12
+[2026-06-22 20:39:40] auth: Connection accepted for user 'guest' from 192.168.1.15
+[2026-06-22 20:39:48] auth: Failed login attempt for user 'developer' from 185.220.101.4
+[2026-06-22 20:39:56] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 20:40:04] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
+[2026-06-22 20:40:12] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
+[2026-06-22 20:40:20] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
+[2026-06-22 20:40:28] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
+[2026-06-22 20:40:36] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
+[2026-06-22 20:40:44] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
+[2026-06-22 20:40:52] nginx: 198.51.100.12 - - "GET /login?user=admin' UNION SELECT NULL,password-- HTTP/1.1" 401
+[2026-06-22 20:58:33] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 20:58:41] systemd: Periodic cleanup task executed successfully.
+[2026-06-22 20:58:56] auth: Connection accepted for user 'admin' from 185.220.101.4
