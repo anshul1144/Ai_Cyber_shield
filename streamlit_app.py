@@ -374,9 +374,11 @@ def main():
             orchestrator.stop()
 
 if __name__ == "__main__":
+    import sys
     try:
         import streamlit as st
-        is_streamlit = st.runtime.exists()
+        _basename = os.path.basename(sys.argv[0]).lower() if sys.argv else ""
+        is_streamlit = st.runtime.exists() or ("streamlit" in _basename and "streamlit_app" not in _basename)
     except Exception:
         is_streamlit = False
     
@@ -912,8 +914,10 @@ def run_streamlit_app():
     st.rerun()
 
 try:
+    import sys
     import streamlit as st
-    is_streamlit_run = st.runtime.exists()
+    _basename = os.path.basename(sys.argv[0]).lower() if sys.argv else ""
+    is_streamlit_run = st.runtime.exists() or ("streamlit" in _basename and "streamlit_app" not in _basename)
 except Exception:
     is_streamlit_run = False
 
